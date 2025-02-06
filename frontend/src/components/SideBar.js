@@ -28,7 +28,7 @@ const SideBar = () => {
   const [onlineUser, setOnlineUser] = useState(null);
   const [activeButton, setActiveButton] = useState("all");
 
-  console.log(latestMessages)
+  // console.log(latestMessages)
 
   useEffect(() => {
     if (group.id === "" && group.groupname === "" && !isLoggedin) {

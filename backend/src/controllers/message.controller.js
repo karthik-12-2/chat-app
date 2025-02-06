@@ -3,7 +3,6 @@ import Message from "../models/message.model.js";
 import mongoose from "mongoose";
 import UserModel from "../models/user.model.js";
 import cloudinary from "../lib/cloudinary.js";
-console.log(process.env.CLOUDINARY_CLOUD_NAME)
 
 export const getMessages = async (req, res) => {
   console.log("getMessage");

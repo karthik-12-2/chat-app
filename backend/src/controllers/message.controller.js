@@ -47,7 +47,6 @@ export const sendMessage = async (req, res) => {
       await newMessage.save();
     }
     
-    console.log(newMessage);
     io.emit("new message", newMessage);
     return res.status(200).json(newMessage);
   } catch (error) {
@@ -55,22 +54,6 @@ export const sendMessage = async (req, res) => {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
-
-// export const getLatestMessage = async (req, res) => {
-//   try {
-//     const senderId = req.user._id;
-//     const receiverId =  new mongoose.Types.ObjectId(req.params.id);
-
-//     const latestMessage = await Message.findOne({senderId, receiverId}).sort({createdAt: -1})
-
-//     console.log(latestMessage)
-//     // io.emit("new message", newMessage);
-//     return res.status(200).json(latestMessage);
-//   } catch (error) {
-//     console.log("error in getlatestmessage controller", error.message);
-//     return res.status(500).json({ message: "Internal Server Error" });
-//   }
-// }
 
 export const getLatestMessageEveryUser = async (req, res) => {
   console.log("starting");

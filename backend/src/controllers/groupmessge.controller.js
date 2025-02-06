@@ -25,7 +25,6 @@ export const sendMessage = async (req, res) => {
       await newMessage.save();
     }
 
-    console.log(gid, "newgroupmessage");
     io.emit("newgroupmessage", newMessage);
   } catch (error) {
     console.log("error from sendMessage group controller", error);

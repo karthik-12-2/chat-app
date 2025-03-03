@@ -19,14 +19,13 @@ export const createGroup = createAsyncThunk(
   }
 );
 
-
 export const sendGroupMessage = createAsyncThunk(
   "group/sendGroupMessage",
   async (data, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post(
         `/group/messages/sendmessage/${data.gid}/${data.sid}`,
-        {message: data.message, image: data.image}
+        { message: data.message, image: data.image }
       );
       return response.data;
     } catch (error) {
@@ -42,9 +41,8 @@ export const getGroupMessage = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get(
-        `/group/messages/getmessage/${data.gid}`,
+        `/group/messages/getmessage/${data.gid}`
       );
-      console.log(response.data)
       return response.data;
     } catch (error) {
       return rejectWithValue(
@@ -53,7 +51,6 @@ export const getGroupMessage = createAsyncThunk(
     }
   }
 );
-
 
 export const getAllGroups = createAsyncThunk(
   "group/getAllGroups",
@@ -87,8 +84,9 @@ export const fetchLatestGroupMessages = createAsyncThunk(
   "message/fetchLatestGroupMessages",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get(`/group/messages/fetchlatestgroupmessages/message`);
-      console.log(response.data)
+      const response = await axiosInstance.get(
+        `/group/messages/fetchlatestgroupmessages/message`
+      );
       return response.data;
     } catch (error) {
       return rejectWithValue(
@@ -106,7 +104,7 @@ export const groupSlice = createSlice({
     group: { id: "", groupname: "" },
     groupMessage: [],
     latestMessage: [],
-    samePersonsinGroup: []
+    samePersonsinGroup: [],
   },
   reducers: {
     setGroup: (state, action) => {
@@ -114,76 +112,61 @@ export const groupSlice = createSlice({
       state.group.groupname = action.payload.groupname;
     },
     setOpen: (state, action) => {
-      // console.log(action.payload)
-      state.opengroup = action.payload
-    }
+      state.opengroup = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(createGroup.pending, () => {
-        // console.log("pending");
-      })
+      .addCase(createGroup.pending, () => {})
+
       .addCase(createGroup.fulfilled, (state) => {
-        state.opengroup = false
+        state.opengroup = false;
         toast.success("New group created Successfully");
       })
-      .addCase(createGroup.rejected, () => {
-        // console.log("rejected");
-      })
 
-      .addCase(getAllGroups.pending, () => {
-        // console.log("pending");
-      })
+      .addCase(createGroup.rejected, () => {})
+
+      .addCase(getAllGroups.pending, () => {})
+
       .addCase(getAllGroups.fulfilled, (state, action) => {
         state.groups = action.payload.groupsforwhichuser;
       })
-      .addCase(getAllGroups.rejected, () => {
-        // console.log("rejected");
-      })
-      .addCase(getGroups.pending, () => {
-        // console.log("pending");
-      })
+
+      .addCase(getAllGroups.rejected, () => {})
+
+      .addCase(getGroups.pending, () => {})
+
       .addCase(getGroups.fulfilled, (state, action) => {
-        console.log(action.payload)
         state.samePersonsinGroup = action.payload.group;
       })
+
       .addCase(getGroups.rejected, () => {
         console.log("rejected");
       })
 
-      .addCase(sendGroupMessage.pending, () => {
-        // console.log("pending");
-      })
+      .addCase(sendGroupMessage.pending, () => {})
+
       .addCase(sendGroupMessage.fulfilled, (state, action) => {
-        // state.groups = action.payload.groupsforwhichuser;
         toast.success("msg send Successfully");
       })
-      .addCase(sendGroupMessage.rejected, () => {
-        // console.log("rejected");
-      })
 
-      .addCase(getGroupMessage.pending, () => {
-        // console.log("pending");
-      })
+      .addCase(sendGroupMessage.rejected, () => {})
+
+      .addCase(getGroupMessage.pending, () => {})
+
       .addCase(getGroupMessage.fulfilled, (state, action) => {
         state.groupMessage = action.payload;
-        
-      })
-      .addCase(getGroupMessage.rejected, () => {
-        // console.log("rejected");
       })
 
-      .addCase(fetchLatestGroupMessages.pending, () => {
-        // console.log("pending");
-      })
+      .addCase(getGroupMessage.rejected, () => {})
+
+      .addCase(fetchLatestGroupMessages.pending, () => {})
+
       .addCase(fetchLatestGroupMessages.fulfilled, (state, action) => {
-        // console.log('fulfilled')
         state.latestMessage = action.payload;
-        
       })
-      .addCase(fetchLatestGroupMessages.rejected, () => {
-        // console.log("rejected");
-      });
+
+      .addCase(fetchLatestGroupMessages.rejected, () => {});
   },
 });
 

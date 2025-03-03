@@ -1,6 +1,5 @@
 import { Avatar, Box } from "@mui/material";
 import FormattedTime from "../FormattedTime";
-import { useEffect } from "react";
 
 const SingleChat = ({
   users,
@@ -10,23 +9,32 @@ const SingleChat = ({
   onlineUser,
   latestMessages,
 }) => {
-
-  // const [contextMenu, setContextMenu] = useState(null);
-
   const handleContextMenu = (e, user) => {
     e.preventDefault();
-    // setContextMenu(user);
-    // console.log(user)
-  }
-  console.log('currentuser', currentUser)
+  };
 
-  users.map(user => user._id &&
-    latestMessages.filter(latestMessage => latestMessage.senderId === currentUser.id && latestMessage.receiverId === user._id).map(latestMessage => console.log(latestMessage))
-      )
-  // useEffect(() => {
-  // }, [])
+  // users.map(
+  //   (user) =>
+  //     user._id &&
+  //     latestMessages
+  //       .filter(
+  //         (latestMessage) =>
+  //           latestMessage.senderId === currentUser.id &&
+  //           latestMessage.receiverId === user._id
+  //       )
+  //       .map((latestMessage) => console.log(latestMessage))
+  // );
+
   return (
-    <div style={{width: '100%', position: 'absolute', marginTop: '10px', height: '70vh'}} className="overflow-y-scroll pe-1">
+    <div
+      style={{
+        width: "100%",
+        position: "absolute",
+        marginTop: "10px",
+        height: "70vh",
+      }}
+      className="overflow-y-scroll pe-1"
+    >
       {users.length > 0 ? (
         users.map(
           (user, i) =>
@@ -97,23 +105,29 @@ const SingleChat = ({
                       <p className="d-lg-flex flex-row d-sm-none">
                         {user.userName}
                       </p>
-                        {latestMessages.filter(
+                      {latestMessages
+                        .filter(
                           (latestMessage) =>
-                            latestMessage.senderId === currentUser.id && latestMessage.receiverId === user._id).map( (latestMessage) =>
-                      <p
-                        style={{ marginBottom: "0px" }}
-                        className="d-sm-none d-lg-flex flex-row "
-                      >
-                        
-                            {latestMessage.message.length >= 20 ? latestMessage.message.slice(0,15)+ "..." : latestMessage.message}
-                      </p>
-                        )}
+                            latestMessage.senderId === currentUser.id &&
+                            latestMessage.receiverId === user._id
+                        )
+                        .map((latestMessage) => (
+                          <p
+                            style={{ marginBottom: "0px" }}
+                            className="d-sm-none d-lg-flex flex-row "
+                          >
+                            {latestMessage.message.length >= 20
+                              ? latestMessage.message.slice(0, 15) + "..."
+                              : latestMessage.message}
+                          </p>
+                        ))}
                     </Box>
                   </Box>
                   <p className="d-lg-block d-sm-none">
                     {latestMessages.map(
                       (latestMessage) =>
-                        latestMessage.senderId  === currentUser.id && latestMessage.receiverId === user._id && (
+                        latestMessage.senderId === currentUser.id &&
+                        latestMessage.receiverId === user._id && (
                           <FormattedTime time={latestMessage.updatedAt} />
                         )
                     )}
@@ -128,20 +142,20 @@ const SingleChat = ({
         </Box>
       )}
 
-      {false && (<div
-      style={{
-        position: 'absolute',
-        width: '200px',
-        height: '150px',
-        backgroundColor: "#ffffff",
-        padding: "10px",
-        zIndex: 9999,
-      }}
-      >
-        <p style={{ fontWeight: "bold" }}>
-            Move to Personal
-          </p>
-        </div>)}
+      {false && (
+        <div
+          style={{
+            position: "absolute",
+            width: "200px",
+            height: "150px",
+            backgroundColor: "#ffffff",
+            padding: "10px",
+            zIndex: 9999,
+          }}
+        >
+          <p style={{ fontWeight: "bold" }}>Move to Personal</p>
+        </div>
+      )}
     </div>
   );
 };

@@ -15,7 +15,6 @@ const MessageContainer = ({ messages, whoSends }) => {
     }
   }, [messages]);
 
-  // console.log(groups)
 
   return (
     <>

@@ -28,7 +28,6 @@ const SideBar = () => {
   const [onlineUser, setOnlineUser] = useState(null);
   const [activeButton, setActiveButton] = useState("all");
 
-  // console.log(latestMessages)
 
   useEffect(() => {
     if (group.id === "" && group.groupname === "" && !isLoggedin) {
@@ -59,20 +58,11 @@ const SideBar = () => {
     });
   }, []);
 
-  // useEffect(() => {
-  //   socket.on("totalusers", (tu) => {
-  //     // console.log(tu);
-  //     setTotalUsers(tu);
-  //   });
-  // }, []);
-
-  // console.log(onlineUser);
   useEffect(() => {
     socket.on("loggedoutuser", (user) => {
       const updatedOnlineusers = onlineUser?.filter(
         (online) => online.id === user.id
       );
-      // console.log(updatedOnlineusers);
       setOnlineUser(updatedOnlineusers);
     });
   }, [onlineUser]);
@@ -80,7 +70,6 @@ const SideBar = () => {
   useEffect(() => {
     users.forEach((user) => {
       const online = onlineUser?.some((online) => online.id === user._id);
-      // console.log(online);
       if (online) {
         dispatch(setStatus({ userId: user._id, status: "online" }));
       } else {

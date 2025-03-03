@@ -91,7 +91,6 @@ export const userSlice = createSlice({
       state.anotherUser.username = action.payload.username;
     },
     setStatus: (state, action) => {
-      // console.log(action.payload)
       const index = state.status.findIndex(
         (user) => user.userId === action.payload.userId
       );
@@ -102,7 +101,6 @@ export const userSlice = createSlice({
       }
     },
     setAllUsers: (state, action) => {
-      // console.log(action.payload)
       state.users = action.payload;
     },
     setWhichIsClicked: (state, action) => {
@@ -150,7 +148,6 @@ export const userSlice = createSlice({
         state.loading = true;
       })
       .addCase(checkauth.fulfilled, (state, action) => {
-        // console.log(action.payload)
         state.loading = false;
         state.currentUser.id = action.payload._id;
         state.currentUser.username = action.payload.userName;

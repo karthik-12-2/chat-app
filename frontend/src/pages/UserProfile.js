@@ -7,10 +7,12 @@ import { setWhichIsClicked } from "../slices/userslice/UserSlice";
 const UserProfile = () => {
   const dispatch = useDispatch();
   const { anotherUser, whichIsClicked } = useSelector((state) => state.user);
-  const { samePersonsinGroup, group, groups } = useSelector((state) => state.group);
-  console.log(groups)
+  const { samePersonsinGroup, group, groups } = useSelector(
+    (state) => state.group
+  );
+
   function handleCancel() {
-    dispatch(setWhichIsClicked(null))
+    dispatch(setWhichIsClicked(null));
   }
 
   return (
@@ -18,90 +20,112 @@ const UserProfile = () => {
       className="col-12 position-absolute rounded-4 bg-light p-3"
       style={{ height: "100%" }}
     >
-      <ClearIcon onClick={handleCancel} sx={{cursor: "pointer"}}/>
-      {!whichIsClicked ? <>
-        <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Avatar sx={{ width: "100px", height: "100px" }} />
-        <h4 className="mt-1">{anotherUser?.username}</h4>
-      </Box>
-      <Divider sx={{ border: "1px solid black", marginBlock: "10px" }} />
-      <Box>
-        <h5 className="d-flex justify-content-center gap-3 my-4">
-          <GroupIcon />
-          Mutual Groups
-        </h5>
-        <Box sx={{ overflowY: "scroll", height: "60vh" }}>
-          {samePersonsinGroup.map((spg) => (
-            <Box sx={{ display: "flex", gap: "10px", marginBottom: "15px" }}>
-              <Avatar
-                sx={{
-                  width: "50px",
-                  height: "50px",
-                  position: "relative",
-                }}
-              ></Avatar>
-              <Box sx={{ lineHeight: "0.8" }}>
-                <p>{spg.groupName}</p>
-                <p className="w-100 text-wrap text-truncate">
-                  {spg.groupMembers.map((spggroupMembers) => (
-                    <span>{`${spggroupMembers.userName}, `}</span>
-                  ))}
-                </p>
-              </Box>
-            </Box>
-          ))}
-        </Box>
-      </Box>
-      </> :
-      <>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Avatar sx={{ width: "100px", height: "100px" }} />
-        <h4 className="mt-1">{group?.groupname}</h4>
-      </Box>
-      <Divider sx={{ border: "1px solid black", marginBlock: "10px" }} />
-      <Box>
-        <h5 className="d-flex justify-content-center gap-3 my-4">
-          <GroupIcon />
-          Group Members
-        </h5>
-        <Box sx={{ overflowY: "scroll", height: "55vh" }}>
-              {groups.map((g) => ( g._id === group.id &&
-            <Box sx={{ display: "flex", flexDirection: 'column' , gap: "10px", marginBottom: "15px" }}>
-              {g.groupMembers.map((ggroupMembers) => (
-            <Box sx={{display: 'flex', gap: '10px', marginInline: '20px', marginBlock: '10px'}}>
-            <Avatar
-              sx={{
-                width: "50px",
-                height: "50px",
-                position: "relative",
-              }}
-            ></Avatar>
-            <Box sx={{paddingBlock: '5px'}}>
-              <p className="w-100 text-wrap text-truncate">
-                  {ggroupMembers.userName}
-              </p>
-            </Box></Box>
-                ))}
+      <ClearIcon onClick={handleCancel} sx={{ cursor: "pointer" }} />
+      {!whichIsClicked ? (
+        <>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Avatar sx={{ width: "100px", height: "100px" }} />
+            <h4 className="mt-1">{anotherUser?.username}</h4>
           </Box>
-          ))}
-        </Box>
-      </Box>
-      </>
-      }
+          <Divider sx={{ border: "1px solid black", marginBlock: "10px" }} />
+          <Box>
+            <h5 className="d-flex justify-content-center gap-3 my-4">
+              <GroupIcon />
+              Mutual Groups
+            </h5>
+            <Box sx={{ overflowY: "scroll", height: "60vh" }}>
+              {samePersonsinGroup.map((spg) => (
+                <Box
+                  sx={{ display: "flex", gap: "10px", marginBottom: "15px" }}
+                >
+                  <Avatar
+                    sx={{
+                      width: "50px",
+                      height: "50px",
+                      position: "relative",
+                    }}
+                  ></Avatar>
+                  <Box sx={{ lineHeight: "0.8" }}>
+                    <p>{spg.groupName}</p>
+                    <p className="w-100 text-wrap text-truncate">
+                      {spg.groupMembers.map((spggroupMembers) => (
+                        <span>{`${spggroupMembers.userName}, `}</span>
+                      ))}
+                    </p>
+                  </Box>
+                </Box>
+              ))}
+            </Box>
+          </Box>
+        </>
+      ) : (
+        <>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Avatar sx={{ width: "100px", height: "100px" }} />
+            <h4 className="mt-1">{group?.groupname}</h4>
+          </Box>
+          <Divider sx={{ border: "1px solid black", marginBlock: "10px" }} />
+          <Box>
+            <h5 className="d-flex justify-content-center gap-3 my-4">
+              <GroupIcon />
+              Group Members
+            </h5>
+            <Box sx={{ overflowY: "scroll", height: "55vh" }}>
+              {groups.map(
+                (g) =>
+                  g._id === group.id && (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "10px",
+                        marginBottom: "15px",
+                      }}
+                    >
+                      {g.groupMembers.map((ggroupMembers) => (
+                        <Box
+                          sx={{
+                            display: "flex",
+                            gap: "10px",
+                            marginInline: "20px",
+                            marginBlock: "10px",
+                          }}
+                        >
+                          <Avatar
+                            sx={{
+                              width: "50px",
+                              height: "50px",
+                              position: "relative",
+                            }}
+                          ></Avatar>
+                          <Box sx={{ paddingBlock: "5px" }}>
+                            <p className="w-100 text-wrap text-truncate">
+                              {ggroupMembers.userName}
+                            </p>
+                          </Box>
+                        </Box>
+                      ))} 
+                     </Box>
+                  )
+              )}
+            </Box>
+          </Box>
+        </>
+      )}
     </div>
   );
 };

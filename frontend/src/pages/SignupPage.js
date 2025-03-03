@@ -14,18 +14,14 @@ const SignupPage = () => {
   const { loading, isRegistered } = useSelector(
     (state) => state.user
   );
+  
   const [formData, setFomData] = useState({
     userName: "",
     email: "",
     password: "",
   });
-  const [showPassword, setshowPassword] = useState(false);
 
-  // useEffect(() => {
-  //   if (isLoggedin) {
-  //     navigate("/");
-  //   }
-  // }, [isLoggedin, navigate]);
+  const [showPassword, setshowPassword] = useState(false);
 
   function handleFormData(e) {
     const { name, value } = e.target;

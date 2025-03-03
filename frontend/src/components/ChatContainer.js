@@ -44,7 +44,6 @@ const ChatContainer = () => {
   useEffect(() => {
     socket.on("new message", (message) => {
       if (message) {
-        console.log("New message received:", message);
         dispatch(getMessages(anotherUser.id));
         dispatch(getLatestMessageEveryUser());
       }

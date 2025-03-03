@@ -3,7 +3,6 @@ import UserModel from "../models/user.model.js";
 import bcrypt from "bcrypt";
 
 export const SignupController = async (req, res) => {
-  console.log(req.body);
   try {
     const { userName, email, password } = req.body;
     

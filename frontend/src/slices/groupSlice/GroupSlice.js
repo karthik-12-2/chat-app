@@ -2,171 +2,172 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../lib/axios";
 import toast from "react-hot-toast";
 
+// create group
 export const createGroup = createAsyncThunk(
   "group/createGroup",
   async (data, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post(
+      const { data: response } = await axiosInstance.post(
         "/group/users/creategroup",
         data
       );
-      return response.data;
+      return response;
     } catch (error) {
-      return rejectWithValue(
-        error.response ? error.response.data : error.message
-      );
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
 
+// Send Group Message
 export const sendGroupMessage = createAsyncThunk(
   "group/sendGroupMessage",
   async (data, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post(
+      const { data: response } = await axiosInstance.post(
         `/group/messages/sendmessage/${data.gid}/${data.sid}`,
         { message: data.message, image: data.image }
       );
-      return response.data;
+      return response;
     } catch (error) {
-      return rejectWithValue(
-        error.response ? error.response.data : error.message
-      );
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
 
+// Get Group Message
 export const getGroupMessage = createAsyncThunk(
   "group/getGroupMessage",
   async (data, { rejectWithValue }) => {
-    try {
-      const response = await axiosInstance.get(
-        `/group/messages/getmessage/${data.gid}`
-      );
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(
-        error.response ? error.response.data : error.message
-      );
-    }
+    if(data.gid) //TODO send the data.gid without empty
+      try {
+        const { data: response } = await axiosInstance.get(
+          `/group/messages/getmessage/${data.gid}`
+        );
+        return response;
+      } catch (error) {
+        return rejectWithValue(error.response?.data || error.message);
+      }
   }
 );
 
+// Get All Groups
 export const getAllGroups = createAsyncThunk(
   "group/getAllGroups",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get("/group/users/getallgroups");
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(
-        error.response ? error.response.data : error.message
+      const { data: response } = await axiosInstance.get(
+        "/group/users/getallgroups"
       );
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
 
+// Get Group for a specific user
 export const getGroups = createAsyncThunk(
   "group/getGroups",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get(`/group/users/getgroups/${id}`);
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(
-        error.response ? error.response.data : error.message
+      const { data: response } = await axiosInstance.get(
+        `/group/users/getgroups/${id}`
       );
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
 
+// Fetch latest Group messages
 export const fetchLatestGroupMessages = createAsyncThunk(
   "message/fetchLatestGroupMessages",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get(
+      const { data: response } = await axiosInstance.get(
         `/group/messages/fetchlatestgroupmessages/message`
       );
-      return response.data;
+      return response;
     } catch (error) {
-      return rejectWithValue(
-        error.response ? error.response.data : error.message
-      );
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
 
+// InitialState
+const initialState = {
+  opengroup: false,
+  groups: [],
+  group: { id: "", groupname: "" },
+  groupMessage: [],
+  latestMessage: [],
+  samePersonsinGroup: [],
+};
+
 export const groupSlice = createSlice({
   name: "group",
-  initialState: {
-    opengroup: false,
-    groups: [],
-    group: { id: "", groupname: "" },
-    groupMessage: [],
-    latestMessage: [],
-    samePersonsinGroup: [],
-  },
+  initialState,
   reducers: {
-    setGroup: (state, action) => {
-      state.group.id = action.payload.id;
-      state.group.groupname = action.payload.groupname;
+    setGroup: (state, { payload }) => {
+      state.group = { id: payload.id, groupname: payload.groupname };
     },
-    setOpen: (state, action) => {
-      state.opengroup = action.payload;
+    setOpen: (state, { payload }) => {
+      state.opengroup = payload;
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(createGroup.pending, () => {})
-
+      .addCase(createGroup.pending, () => {
+        toast.loading("Creating group...");
+      })
       .addCase(createGroup.fulfilled, (state) => {
         state.opengroup = false;
+        toast.dismiss();
         toast.success("New group created Successfully");
       })
-
-      .addCase(createGroup.rejected, () => {})
-
-      .addCase(getAllGroups.pending, () => {})
-
-      .addCase(getAllGroups.fulfilled, (state, action) => {
-        state.groups = action.payload.groupsforwhichuser;
+      .addCase(createGroup.rejected, (state, { payload }) => {
+        toast.dismiss();
+        toast.error(payload || "Failed to create group.");
       })
 
-      .addCase(getAllGroups.rejected, () => {})
-
-      .addCase(getGroups.pending, () => {})
-
-      .addCase(getGroups.fulfilled, (state, action) => {
-        state.samePersonsinGroup = action.payload.group;
+      .addCase(getAllGroups.fulfilled, (state, { payload }) => {
+        state.groups = payload.groupsforwhichuser;
+      })
+      .addCase(getAllGroups.rejected, (_, { payload }) => {
+        toast.error(payload || "Failed to fetch groups.");
       })
 
-      .addCase(getGroups.rejected, () => {
-        console.log("rejected");
+      .addCase(getGroups.fulfilled, (state, { payload }) => {
+        state.samePersonsinGroup = payload.group;
+      })
+      .addCase(getGroups.rejected, (_, { payload }) => {
+        toast.error(payload || "Failed to fetch user groups.");
       })
 
-      .addCase(sendGroupMessage.pending, () => {})
-
-      .addCase(sendGroupMessage.fulfilled, (state, action) => {
-        toast.success("msg send Successfully");
+      .addCase(sendGroupMessage.fulfilled, (state, {payload}) => {
+        toast.success("Message sent successfully!");
+        if(payload){
+          state.groupMessage.push(payload)
+        }
+      })
+      .addCase(sendGroupMessage.rejected, (_, { payload }) => {
+        toast.error(payload || "Failed to send message.");
       })
 
-      .addCase(sendGroupMessage.rejected, () => {})
-
-      .addCase(getGroupMessage.pending, () => {})
-
-      .addCase(getGroupMessage.fulfilled, (state, action) => {
-        state.groupMessage = action.payload;
+      .addCase(getGroupMessage.fulfilled, (state, { payload }) => {
+        state.groupMessage = payload;
+      })
+      .addCase(getGroupMessage.rejected, (_, { payload }) => {
+        toast.error(payload || "Failed to fetch messages.");
       })
 
-      .addCase(getGroupMessage.rejected, () => {})
-
-      .addCase(fetchLatestGroupMessages.pending, () => {})
-
-      .addCase(fetchLatestGroupMessages.fulfilled, (state, action) => {
-        state.latestMessage = action.payload;
+      .addCase(fetchLatestGroupMessages.fulfilled, (state, { payload }) => {
+        state.latestMessage = payload;
       })
-
-      .addCase(fetchLatestGroupMessages.rejected, () => {});
+      .addCase(fetchLatestGroupMessages.rejected, (_, { payload }) => {
+        toast.error(payload || "Failed to fetch latest messages.");
+      });
   },
 });
 

@@ -1,83 +1,86 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../lib/axios";
 
+// Get message
 export const getMessages = createAsyncThunk(
   "message/getMessages",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get(`/message/${id}`);
-      return response.data;
+      const { data: response } = await axiosInstance.get(`/message/${id}`);
+      return response;
     } catch (error) {
-      return rejectWithValue(
-        error.response ? error.response.data : error.message
-      );
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
 
+// Get latestMessage
 export const getLatestMessage = createAsyncThunk(
   "message/getLatestMessage",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get(`/message/getLatestMessage/${id}`);
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(
-        error.response ? error.response.data : error.message
+      const { data: response } = await axiosInstance.get(
+        `/message/getLatestMessage/${id}`
       );
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
 
+// Get latest Message for Every user
 export const getLatestMessageEveryUser = createAsyncThunk(
   "message/getLatestMessageEveryUser",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get(`/message/getlatestmessageeveryuser/message`);
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(
-        error.response ? error.response.data : error.message
+      const { data: response } = await axiosInstance.get(
+        `/message/getlatestmessageeveryuser/message`
       );
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
 
+// SendMessage
 export const sendMessage = createAsyncThunk(
   "message/sendMessage",
   async (user, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post(`/message/send/${user.id}`, {message: user.message, image: user.image});
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(
-        error.response ? error.response.data : error.message
+      const { data: response } = await axiosInstance.post(
+        `/message/send/${user.id}`,
+        { message: user.message, image: user.image }
       );
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
 
+const  initialState = {
+  messages: [],
+  isMessageLoading: false,
+  latestMessages: [],
+}
+
 export const messageSlice = createSlice({
   name: "message",
-  initialState: {
-    messages: [],
-    isMessageLoading: false,
-    latestMessages: []
-  },
+ initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(getMessages.pending, (state) => {
         state.isMessageLoading = true;
       })
-
-      .addCase(getMessages.fulfilled, (state, action) => {
+      .addCase(getMessages.fulfilled, (state, {payload}) => {
         state.isMessageLoading = false;
-        if (action.payload) {
-          state.messages = action.payload;
+        if (payload) {
+          state.messages = payload;
         }
       })
-
       .addCase(getMessages.rejected, (state) => {
         state.isMessageLoading = false;
       })
@@ -85,11 +88,12 @@ export const messageSlice = createSlice({
       .addCase(sendMessage.pending, (state) => {
         state.isMessageLoading = true;
       })
-
-      .addCase(sendMessage.fulfilled, (state, action) => {
+      .addCase(sendMessage.fulfilled, (state, {payload}) => {
         state.isMessageLoading = false;
+        if (payload) {
+          state.messages.push(payload);
+        }
       })
-
       .addCase(sendMessage.rejected, (state) => {
         state.isMessageLoading = false;
       })
@@ -97,15 +101,13 @@ export const messageSlice = createSlice({
       .addCase(getLatestMessageEveryUser.pending, (state) => {
         state.isMessageLoading = true;
       })
-
-      .addCase(getLatestMessageEveryUser.fulfilled, (state, action) => {
+      .addCase(getLatestMessageEveryUser.fulfilled, (state, {payload}) => {
         state.isMessageLoading = false;
-        state.latestMessages = action.payload
+        state.latestMessages = payload;
       })
-
       .addCase(getLatestMessageEveryUser.rejected, (state) => {
         state.isMessageLoading = false;
-      })
+      });
   },
 });
 

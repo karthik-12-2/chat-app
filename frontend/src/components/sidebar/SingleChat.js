@@ -1,5 +1,6 @@
 import { Avatar, Box } from "@mui/material";
 import FormattedTime from "../FormattedTime";
+import ImageIcon from '@mui/icons-material/Image';
 
 const SingleChat = ({
   users,
@@ -35,7 +36,7 @@ const SingleChat = ({
       }}
       className="overflow-y-scroll pe-1"
     >
-      {users.length > 0 ? (
+      {users.length > 0 &&
         users.map(
           (user, i) =>
             currentUser.id !== user._id && (
@@ -116,9 +117,14 @@ const SingleChat = ({
                             style={{ marginBottom: "0px" }}
                             className="d-sm-none d-lg-flex flex-row "
                           >
-                            {latestMessage.message.length >= 20
-                              ? latestMessage.message.slice(0, 15) + "..."
-                              : latestMessage.message}
+                            {latestMessage.image
+                              ? <>
+                              <ImageIcon sx={{position:'relative', bottom: '5px'}}/> Image
+                            </>
+                              : latestMessage.message.trim().length >= 20
+                              ? latestMessage.message.trim().slice(0, 15) +
+                                "..."
+                              : latestMessage.message || ""}
                           </p>
                         ))}
                     </Box>
@@ -135,12 +141,7 @@ const SingleChat = ({
                 </>
               </Box>
             )
-        )
-      ) : (
-        <Box display="flex" justifyContent="space-between" marginBottom="10px">
-          <p>No messages</p>
-        </Box>
-      )}
+        )}
 
       {false && (
         <div

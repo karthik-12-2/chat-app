@@ -15,7 +15,7 @@ const SignupPage = () => {
     (state) => state.user
   );
   
-  const [formData, setFomData] = useState({
+  const [formData, setFormData] = useState({
     userName: "",
     email: "",
     password: "",
@@ -23,12 +23,12 @@ const SignupPage = () => {
 
   const [showPassword, setshowPassword] = useState(false);
 
-  function handleFormData(e) {
+  const handleFormData = (e) => {
     const { name, value } = e.target;
-    setFomData((prevData) => ({ ...prevData, [name]: value }));
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
   }
 
-  function handleSubmit(e) {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.userName) return toast.error("Full name is required");
     if (!formData.email) return toast.error("Email address is required");

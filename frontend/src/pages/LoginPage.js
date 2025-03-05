@@ -12,34 +12,32 @@ const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, isLoggedin } = useSelector((state) => state.user);
-  const [formData, setFomData] = useState({
+  const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
   const [showPassword, setshowPassword] = useState(false);
 
   useEffect(() => {
-    if (isLoggedin) {
-      navigate("/");
-    }
+    if (isLoggedin) navigate("/");
   }, [isLoggedin, navigate]);
 
-  function handleFormData(e) {
+  const handleFormData = (e) => {
     const { name, value } = e.target;
-    setFomData((prevData) => ({ ...prevData, [name]: value }));
-  }
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
 
-  function handleSubmit(e) {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.email) return toast.error("Email address is required");
     if (!formData.password) return toast.error("Password is required");
     if (!/\S+@\S+\.\S+/.test(formData.email))
-      return toast.error("Please enter correct email address");
+      return toast.error("Please enter a valid email address");
     if (formData.password.length < 6)
       return toast.error("Password must be 6 letters");
 
     dispatch(login(formData));
-  }
+  };
 
   return (
     <div className="row d-flex align-items-center justify-content-center mt-5 mx-0">

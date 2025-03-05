@@ -9,13 +9,14 @@ import { Toaster } from "react-hot-toast";
 import ErrorPage from "./pages/404/ErrorPage";
 import SideBar from "./components/SideBar";
 import { useSelector } from "react-redux";
+import { Box } from "@mui/material";
 
 function App() {
   const {isLoggedin} = useSelector((state) => state.user)
   return (
-    <div className={`row m-0 p-1 ${isLoggedin ? 'bg-danger bg-opacity-25' : ''}`} >
+    <Box className={`row m-0 p-1`} >
       <NavBar />
-      {true && <SideBar/>}
+      {isLoggedin && <SideBar/>}
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/signup" element={<SignupPage />} />
@@ -24,7 +25,7 @@ function App() {
       </Routes>
 
       <Toaster />
-    </div>
+    </Box>
   );
 }
 

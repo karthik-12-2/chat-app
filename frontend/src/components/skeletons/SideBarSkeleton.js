@@ -16,6 +16,67 @@ const SideBarSkeleton = () => {
           </Box>
       </Box>
       <Divider sx={{marginBottom: '10px'}}/>
+      <div
+              style={{
+                height: "40px",
+                width: "auto",
+                backgroundColor: "whitesmoke",
+                display: "flex",
+                justifyContent: "space-between",
+                padding: "5px",
+                paddingInline: "5px",
+                borderRadius: "25px",
+                marginBottom: "10px",
+                position: "relative",
+              }}
+            >
+              {" "}
+              <button
+                style={{
+                  height: "30px",
+                  color: "blue",
+                  borderRadius: "15px",
+                  backgroundColor: "lightgreen",
+                  width: "20%",
+                  paddingTop: "2px",
+                  paddingLeft: "6px",
+                  border: "none",
+                  position: "relative",
+                }}
+              >
+                All
+              </button>
+              <button
+                style={{
+                  height: "30px",
+                  color: "blue",
+                  borderRadius: "15px",
+                  backgroundColor:
+                    "whitesmoke",
+                  width: "30%",
+                  paddingTop: "2px",
+                  paddingLeft: "6px",
+                  border: "none",
+                }}
+              >
+                Personals
+              </button>
+              <button
+                style={{
+                  height: "30px",
+                  color: "blue",
+                  borderRadius: "15px",
+                  backgroundColor:"whitesmoke",
+                  width: "20%",
+                  paddingTop: "2px",
+                  paddingLeft: "6px",
+                  border: "none",
+                }}
+                
+              >
+                Group
+              </button>
+            </div>
       {users.map((_, i) => (
         <Box display="flex" alignItems="center" key={i} flexDirection='row' sx={{marginBottom: '12px'}}>
           <Avatar sx={{ width: 60, height: 60 }}>

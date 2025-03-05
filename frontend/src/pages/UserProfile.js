@@ -6,14 +6,14 @@ import { setWhichIsClicked } from "../slices/userslice/UserSlice";
 
 const UserProfile = () => {
   const dispatch = useDispatch();
-  const { anotherUser, whichIsClicked } = useSelector((state) => state.user);
+  const { anotherUser } = useSelector((state) => state.user);
   const { samePersonsinGroup, group, groups } = useSelector(
     (state) => state.group
   );
 
-  function handleCancel() {
+  const handleCancel = () => {
     dispatch(setWhichIsClicked(null));
-  }
+  };
 
   return (
     <div
@@ -21,7 +21,7 @@ const UserProfile = () => {
       style={{ height: "100%" }}
     >
       <ClearIcon onClick={handleCancel} sx={{ cursor: "pointer" }} />
-      {!whichIsClicked ? (
+      {!group ? (
         <>
           <Box
             sx={{
@@ -49,15 +49,12 @@ const UserProfile = () => {
                     sx={{
                       width: "50px",
                       height: "50px",
-                      position: "relative",
                     }}
                   ></Avatar>
                   <Box sx={{ lineHeight: "0.8" }}>
                     <p>{spg.groupName}</p>
                     <p className="w-100 text-wrap text-truncate">
-                      {spg.groupMembers.map((spggroupMembers) => (
-                        <span>{`${spggroupMembers.userName}, `}</span>
-                      ))}
+                      {spg.groupMembers.map((members) => members.join(", "))}
                     </p>
                   </Box>
                 </Box>
@@ -85,43 +82,44 @@ const UserProfile = () => {
               Group Members
             </h5>
             <Box sx={{ overflowY: "scroll", height: "55vh" }}>
-              {groups.map(
-                (g) =>
-                  g._id === group.id && (
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "10px",
-                        marginBottom: "15px",
-                      }}
-                    >
-                      {g.groupMembers.map((ggroupMembers) => (
-                        <Box
+              {groups
+                .filter((g) => g._id === group.id)
+                .map((g) => (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "10px",
+                      marginBottom: "15px",
+                    }}
+                    key={g.id}
+                  >
+                    {g.groupMembers.map((ggroupMembers) => (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          gap: "10px",
+                          marginInline: "20px",
+                          marginBlock: "10px",
+                        }}
+                        key={ggroupMembers.id}
+                      >
+                        <Avatar
                           sx={{
-                            display: "flex",
-                            gap: "10px",
-                            marginInline: "20px",
-                            marginBlock: "10px",
+                            width: "50px",
+                            height: "50px",
+                            position: "relative",
                           }}
-                        >
-                          <Avatar
-                            sx={{
-                              width: "50px",
-                              height: "50px",
-                              position: "relative",
-                            }}
-                          ></Avatar>
-                          <Box sx={{ paddingBlock: "5px" }}>
-                            <p className="w-100 text-wrap text-truncate">
-                              {ggroupMembers.userName}
-                            </p>
-                          </Box>
+                        ></Avatar>
+                        <Box sx={{ paddingBlock: "5px" }}>
+                          <p className="w-100 text-wrap text-truncate">
+                            {ggroupMembers.userName}
+                          </p>
                         </Box>
-                      ))} 
-                     </Box>
-                  )
-              )}
+                      </Box>
+                    ))}
+                  </Box>
+                ))}
             </Box>
           </Box>
         </>

@@ -2,12 +2,19 @@ import React, { useEffect, useState } from "react";
 import MessageContainer from "./MessageContainer";
 import InputContainer from "./InputContainer";
 import { useDispatch, useSelector } from "react-redux";
-import { getLatestMessageEveryUser, getMessages } from "../slices/messageslice/MessageSlice";
+import {
+  getLatestMessageEveryUser,
+  getMessages,
+} from "../slices/messageslice/MessageSlice";
 import { socket } from "../lib/socket.js";
 import ChatHeader from "./ChatHeader.js";
 import { Box } from "@mui/material";
 import { setStatus } from "../slices/userslice/UserSlice.js";
-import { fetchLatestGroupMessages, getGroupMessage, getGroups } from "../slices/groupSlice/GroupSlice.js";
+import {
+  fetchLatestGroupMessages,
+  getGroupMessage,
+  getGroups,
+} from "../slices/groupSlice/GroupSlice.js";
 
 const ChatContainer = () => {
   const dispatch = useDispatch();
@@ -16,7 +23,6 @@ const ChatContainer = () => {
     (state) => state.user
   );
   const { group, groups, groupMessage } = useSelector((state) => state.group);
-  
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [groupMembers, setGroupMembers] = useState([]);
 
@@ -24,32 +30,38 @@ const ChatContainer = () => {
     const sg = groups.find((g) => g._id === group.id);
     setSelectedGroup(sg);
     setGroupMembers(sg?.groupMembers);
-  }, [groups, selectedGroup, group.id]);
+  }, [groups, group.id]);
 
   useEffect(() => {
-    socket.on("newgroupmessage", (message) => {
+    const handleNewGroupMessage = (message) => {
       if (message) {
         dispatch(getGroupMessage({ gid: group.id }));
         dispatch(fetchLatestGroupMessages());
       }
-    });
+    };
+    socket.on("newgroupmessage", handleNewGroupMessage);
+    return () => socket.off("newgroupmessage", handleNewGroupMessage);
   }, [dispatch, group.id]);
 
   useEffect(() => {
-    socket.on("typing", (status) => {
+    const handleTyping = (status) => {
       dispatch(setStatus({ userId: status.userId, status: status.status }));
-    });
+    };
+
+    socket.on("typing", handleTyping);
+    return () => socket.off("typing", handleTyping);
   }, [dispatch]);
 
   useEffect(() => {
-    socket.on("new message", (message) => {
+    const handleNewMessage = (message) => {
       if (message) {
         dispatch(getMessages(anotherUser.id));
         dispatch(getLatestMessageEveryUser());
       }
-    });
-    return () => socket.off("new message");
-  }, [dispatch, anotherUser]);
+    };
+    socket.on("new message", handleNewMessage);
+    return () => socket.off("new message", handleNewMessage);
+  }, [dispatch, anotherUser.id]);
 
   useEffect(() => {
     if (anotherUser?.id) {
@@ -58,11 +70,12 @@ const ChatContainer = () => {
   }, [dispatch, anotherUser?.id]);
 
   useEffect(() => {
-    if(whichIsClicked === 'more') {
-      dispatch(getGroups(anotherUser.id))
+    if (whichIsClicked === "more") {
+      dispatch(getGroups(anotherUser.id));
     }
-  }, [dispatch, whichIsClicked, anotherUser.id])
+  }, [dispatch, whichIsClicked, anotherUser.id]);
 
+  const userStatus = status.find((s) => s.userId === anotherUser?.id);
   return (
     <Box
       className={`col-12 ms-2 rounded-4 p-0 position-relative`}
@@ -72,32 +85,23 @@ const ChatContainer = () => {
           "url(https://i.pinimg.com/736x/8c/98/99/8c98994518b575bfd8c949e91d20548b.jpg)",
       }}
     >
-      {anotherUser?.id &&
-        anotherUser?.username &&
-        status?.map(
-          (s) =>
-            s.userId === anotherUser.id && (
-              <>
-                <ChatHeader
-                  username={anotherUser.username}
-                  status={s.status}
-                />
-                <MessageContainer
-                  messages={messages}
-                  isMessageLoading={isMessageLoading}
-                />
-                <InputContainer id={anotherUser.id} uid={currentUser.id} />
-              </>
-            )
-        )}
+      {anotherUser?.id && anotherUser?.username && userStatus && (
+        <>
+          <ChatHeader
+            username={anotherUser.username}
+            status={userStatus.status}
+          />
+          <MessageContainer
+            messages={messages}
+            isMessageLoading={isMessageLoading}
+          />
+          <InputContainer id={anotherUser.id} uid={currentUser.id} />
+        </>
+      )}
 
       {group?.id && group?.groupname && (
         <>
-          <ChatHeader
-            username={group.groupname}
-            // status={}
-            groupMembers={groupMembers}
-          />
+          <ChatHeader username={group.groupname} groupMembers={groupMembers} />
           <MessageContainer
             groups={groups}
             messages={groupMessage}

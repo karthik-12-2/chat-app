@@ -8,12 +8,13 @@ export const signup = createAsyncThunk(
   "user/signup",
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post("/auth/signup", userData);
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(
-        error.response ? error.response.data : error.message
+      const { data: response } = await axiosInstance.post(
+        "/auth/signup",
+        userData
       );
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
@@ -23,12 +24,13 @@ export const login = createAsyncThunk(
   "user/login",
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post("/auth/login", userData);
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(
-        error.response ? error.response.data : error.message
+      const { data: response } = await axiosInstance.post(
+        "/auth/login",
+        userData
       );
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
@@ -38,43 +40,44 @@ export const checkauth = createAsyncThunk(
   "user/checkauth",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get("/auth/check");
-      return response.data;
+      const { data: response } = await axiosInstance.get("/auth/check");
+      return response;
     } catch (error) {
-      return rejectWithValue(
-        error.response ? error.response.data : error.message
-      );
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
 
+// Get all users
 export const getAllUsers = createAsyncThunk(
   "user/getAllUsers",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get("/auth/getAllUsers");
-      return response.data;
+      const { data: response } = await axiosInstance.get("/auth/getAllUsers");
+      return response;
     } catch (error) {
-      return rejectWithValue(
-        error.response ? error.response.data : error.message
-      );
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
 
+const initialState = {
+  users: [],
+  loading: false,
+  currentUser: { id: "", username: "" },
+  anotherUser: { id: "", username: "" },
+  error: null,
+  isRegistered: false,
+  isLoggedin: localStorage.getItem("isLoggedin") === "true",
+  status: [],
+  whichIsClicked: null,
+};
+
+console.log(initialState.anotherUser)
+
 export const userSlice = createSlice({
   name: "user",
-  initialState: {
-    users: [],
-    loading: false,
-    currentUser: { id: "", username: "" },
-    anotherUser: { id: "", username: "" },
-    error: null,
-    isRegistered: false,
-    isLoggedin: localStorage.getItem("isLoggedin") === "true",
-    status: [],
-    whichIsClicked: null
-  },
+  initialState,
   reducers: {
     logout: (state) => {
       state.isLoggedin = false;
@@ -86,9 +89,8 @@ export const userSlice = createSlice({
       localStorage.removeItem("isLoggedin");
       toast.error(`Your's token has been expired`);
     },
-    setUserToChatId: (state, action) => {
-      state.anotherUser.id = action.payload.id;
-      state.anotherUser.username = action.payload.username;
+    setUserToChatId: (state, {payload}) => {
+      state.anotherUser = {id: payload.id, username: payload.username}
     },
     setStatus: (state, action) => {
       const index = state.status.findIndex(
@@ -104,8 +106,8 @@ export const userSlice = createSlice({
       state.users = action.payload;
     },
     setWhichIsClicked: (state, action) => {
-      state.whichIsClicked = action.payload
-    }
+      state.whichIsClicked = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -133,6 +135,10 @@ export const userSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
         state.isLoggedin = true;
+        state.currentUser = {
+          id: action.payload._id,
+          username: action.payload.userName,
+        };
         socket.emit("loggedin", action.payload);
         localStorage.setItem("isLoggedin", "true");
         toast.success("Logged in Successfully");
@@ -156,9 +162,9 @@ export const userSlice = createSlice({
           username: action.payload.userName,
         });
       })
-      .addCase(checkauth.rejected, (state) => {
+      .addCase(checkauth.rejected, (state, { payload }) => {
         state.loading = false;
-        state.error = true;
+        state.error = payload || "Authentication Failed";
       })
 
       // get all users
@@ -167,6 +173,7 @@ export const userSlice = createSlice({
       })
       .addCase(getAllUsers.fulfilled, (state, action) => {
         state.loading = false;
+        // state.users = action.payload;
         socket.emit("allusers", action.payload);
       })
       .addCase(getAllUsers.rejected, (state) => {
@@ -184,7 +191,13 @@ export const userSlice = createSlice({
   },
 });
 
-export const { logout, invalid, setUserToChatId, setStatus, setAllUsers, setWhichIsClicked } =
-  userSlice.actions;
+export const {
+  logout,
+  invalid,
+  setUserToChatId,
+  setStatus,
+  setAllUsers,
+  setWhichIsClicked,
+} = userSlice.actions;
 
 export default userSlice.reducer;

@@ -16,35 +16,23 @@ const InputContainer = ({ id, uid, group }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    if (!message.trim() && !imagePreview) return;
     if (!group) {
-      dispatch(
-        sendMessage({ id: id, message: message.trim(), image: imagePreview })
-      );
-      setImagePreview(null)
-    }
-
-    handleBlur();
-    if (group) {
-      dispatch(
-        sendGroupMessage({
-          sid: id,
-          gid: uid,
-          message: message.trim(),
-          image: imagePreview,
-        })
-      );
-      setImagePreview(null)
-
+      dispatch(sendMessage({ id, message: message.trim(), image: imagePreview }));
+    } else {
+      dispatch(sendGroupMessage({ sid: id, gid: uid, message: message.trim(), image: imagePreview }));
     }
 
     setMessage("");
+    setImagePreview("")
+    handleBlur();
   };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (!file.type.startsWith("image/")) {
       toast.error("Please select an image file");
+      return ;
     }
 
     const reader = new FileReader();
@@ -65,7 +53,9 @@ const InputContainer = ({ id, uid, group }) => {
 
   const handleRemoveImage = () => {
     setImagePreview(null)
-    if(fileInputRef.current) fileInputRef.current.value = ''
+    setTimeout(() => {
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }, 0);
   }
 
   return (

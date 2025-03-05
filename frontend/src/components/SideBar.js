@@ -8,9 +8,7 @@ import {
   setUserToChatId,
   setWhichIsClicked,
 } from "../slices/userslice/UserSlice";
-import {
-  getLatestMessageEveryUser,
-} from "../slices/messageslice/MessageSlice";
+import { getLatestMessageEveryUser } from "../slices/messageslice/MessageSlice";
 import { socket } from "../lib/socket";
 import SingleChat from "./sidebar/SingleChat";
 import PersonalChat from "./sidebar/PersonalChat";
@@ -27,7 +25,6 @@ const SideBar = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [onlineUser, setOnlineUser] = useState(null);
   const [activeButton, setActiveButton] = useState("all");
-
 
   useEffect(() => {
     if (group.id === "" && group.groupname === "" && !isLoggedin) {
@@ -96,9 +93,8 @@ const SideBar = () => {
     setActiveButton(what);
     dispatch(setUserToChatId({ id: "", username: "" }));
     dispatch(setGroup({ id: "", groupname: "" }));
-    if(what !== 'more'){
-      dispatch(setWhichIsClicked(null))
-
+    if (what !== "more") {
+      dispatch(setWhichIsClicked(null));
     }
   }
 
@@ -126,10 +122,16 @@ const SideBar = () => {
             <Box display="flex">
               <Avatar sx={{ width: 60, height: 60 }} />
               <Box sx={{ marginLeft: 2, lineHeight: 1.2 }}>
-                {(anotherUser?.id && anotherUser?.username) || (group?.id && group?.groupname) ? (
+                {(anotherUser?.id && anotherUser?.username) ||
+                (group?.id && group?.groupname) ? (
                   <>
                     <p className="text-success d-sm-none d-lg-block">
-                      {anotherUser.username || (<>{group.groupname}<span className='text-dark ps-2'>Group</span></>)}
+                      {anotherUser.username || (
+                        <>
+                          {group.groupname}
+                          <span className="text-dark ps-2">Group</span>
+                        </>
+                      )}
                     </p>
                     <p className="text-success d-sm-none d-lg-block">
                       Available

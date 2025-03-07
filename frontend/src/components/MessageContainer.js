@@ -44,7 +44,7 @@ const MessageContainer = ({ messages, whoSends }) => {
                 <div className="d-flex flex-column" style={{ maxWidth: "50%" }}>
                   {whoSends?.find(
                     (whoSend) => whoSend.userId === message.senderId
-                  )?.username && (
+                  )?.userName && (
                     <span
                       className={`${
                         currentUser.id === message.senderId
@@ -55,7 +55,7 @@ const MessageContainer = ({ messages, whoSends }) => {
                       {
                         whoSends?.find(
                           (whoSend) => whoSend.userId === message.senderId
-                        ).username
+                        ).userName
                       }
                     </span>
                   )}

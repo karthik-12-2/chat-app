@@ -42,9 +42,9 @@ const MembersAddinGroup = () => {
         groupName: groupName,
         groupMembers: [
           ...selectedUsers,
-          { userId: currentUser.id, userName: currentUser.username },
+          { userId: currentUser.id, userName: currentUser.userName },
         ],
-        createdBy: { id: currentUser.id, userName: currentUser.username },
+        createdBy: { id: currentUser.id, userName: currentUser.userName },
       })
     );
     setSelectedUsers([]);

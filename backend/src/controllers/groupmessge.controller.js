@@ -9,23 +9,24 @@ export const sendMessage = async (req, res) => {
     const { message, image } = req.body;
 
     let imageUri;
-    if(image) {
-      const uploadedResponse = await cloudinary.uploader.upload(image)
-      imageUri = uploadedResponse.secure_url
+    if (image) {
+      const uploadedResponse = await cloudinary.uploader.upload(image);
+      imageUri = uploadedResponse.secure_url;
     }
 
     const newMessage = new GroupMessageModel({
       senderId: sid,
       receiverId: gid,
       message: message,
-      image: imageUri
+      image: imageUri,
     });
 
     if (newMessage) {
       await newMessage.save();
     }
 
-    io.emit("newgroupmessage", newMessage);   
+    io.emit("newgroupmessage", newMessage);
+    return res.status(201).json(newMessage);
   } catch (error) {
     console.log("error from sendMessage group controller", error);
     return res.status(500).json("Interanl Server Error");
@@ -35,8 +36,8 @@ export const sendMessage = async (req, res) => {
 export const getMessage = async (req, res) => {
   try {
     const { gid } = req.params;
-    const message = await GroupMessageModel.find({receiverId: gid})
-    res.status(200).json(message)
+    const message = await GroupMessageModel.find({ receiverId: gid });
+    return res.status(200).json(message);
   } catch (error) {
     console.log("error from getMessage group controller", error);
     return res.status(500).json("Interanl Server Error");
@@ -44,17 +45,19 @@ export const getMessage = async (req, res) => {
 };
 
 export const fetchlatestgroupmessages = async (req, res) => {
-  console.log("starting");
   try {
     const userIds = await groupUserModel.find({}, { _id: 1 });
     let latestMessage = [];
     for (const userId of userIds) {
-      const userLatestMessage = await GroupMessageModel.find({ receiverId: userId._id  })
+      const userLatestMessage = await GroupMessageModel.find({
+        receiverId: userId._id,
+      })
         .sort({ _id: -1 })
         .limit(1);
-      if (userLatestMessage) latestMessage.push(...userLatestMessage);
+      if (userLatestMessage.length > 0)
+        latestMessage.push(...userLatestMessage);
     }
-    res.status(200).json(latestMessage);
+    return res.status(200).json(latestMessage);
   } catch (error) {
     console.log("error in fetchlatestgroupmessages controller", error.message);
     return res.status(500).json({ message: "Internal Server Error" });

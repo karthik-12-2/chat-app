@@ -38,12 +38,10 @@ export const getAllgroups = async (req, res) => {
           return group;
         })
     );
-    res
-      .status(200)
-      .json({
-        groupsforwhichuser: groupsforwhichuser,
-        whoiscreated: whoiscreated,
-      });
+    return res.status(200).json({
+      groupsforwhichuser: groupsforwhichuser,
+      whoiscreated: whoiscreated,
+    });
   } catch (error) {
     console.log("error from getAllGroups controller", error);
     return res.status(500).json("Interanl Server Error");
@@ -57,12 +55,12 @@ export const getGroups = async (req, res) => {
     const group = await groupUserModel.find({
       groupMembers: {
         $all: [
-          {$elemMatch: {userId: userId}},
-          {$elemMatch: {userId: anotherUserId}}
-        ]
-      }
+          { $elemMatch: { userId: userId } },
+          { $elemMatch: { userId: anotherUserId } },
+        ],
+      },
     });
-    res.status(200).json({ group: group });
+    return res.status(200).json({ group: group });
   } catch (error) {
     console.log("error from getGroups controller", error);
     return res.status(500).json("Interanl Server Error");

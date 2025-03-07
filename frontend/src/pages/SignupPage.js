@@ -53,7 +53,7 @@ const SignupPage = () => {
             onSubmit={handleSubmit}
           >
             <TextField
-              label="UserName"
+              label="userName"
               type="text"
               variant="outlined"
               margin="normal"

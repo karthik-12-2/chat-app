@@ -83,10 +83,10 @@ const ChatContainer = () => {
           "url(https://i.pinimg.com/736x/8c/98/99/8c98994518b575bfd8c949e91d20548b.jpg)",
       }}
     >
-      {anotherUser?.id && anotherUser?.username && userStatus && (
+      {anotherUser?.id && anotherUser?.userName && userStatus && (
         <>
           <ChatHeader
-            username={anotherUser.username}
+            userName={anotherUser.userName}
             status={userStatus.status}
           />
           <MessageContainer
@@ -99,7 +99,7 @@ const ChatContainer = () => {
 
       {group?.id && group?.groupname && (
         <>
-          <ChatHeader username={group.groupname} groupMembers={groupMembers} />
+          <ChatHeader userName={group.groupname} groupMembers={groupMembers} />
           <MessageContainer
             groups={groups}
             messages={groupMessage}

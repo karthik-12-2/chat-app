@@ -64,8 +64,8 @@ export const getAllUsers = createAsyncThunk(
 const initialState = {
   users: [],
   loading: false,
-  currentUser: { id: "", username: "" },
-  anotherUser: { id: "", username: "" },
+  currentUser: { id: "", userName: "" },
+  anotherUser: { id: "", userName: "" },
   error: null,
   isRegistered: false,
   isLoggedin: localStorage.getItem("isLoggedin") === "true",
@@ -90,7 +90,7 @@ export const userSlice = createSlice({
       toast.error(`Your's token has been expired`);
     },
     setUserToChatId: (state, {payload}) => {
-      state.anotherUser = {id: payload.id, username: payload.username}
+      state.anotherUser = {id: payload.id, userName: payload.userName}
     },
     setStatus: (state, action) => {
       const index = state.status.findIndex(
@@ -137,7 +137,7 @@ export const userSlice = createSlice({
         state.isLoggedin = true;
         state.currentUser = {
           id: action.payload._id,
-          username: action.payload.userName,
+          userName: action.payload.userName,
         };
         socket.emit("loggedin", action.payload);
         localStorage.setItem("isLoggedin", "true");
@@ -156,10 +156,10 @@ export const userSlice = createSlice({
       .addCase(checkauth.fulfilled, (state, action) => {
         state.loading = false;
         state.currentUser.id = action.payload._id;
-        state.currentUser.username = action.payload.userName;
+        state.currentUser.userName = action.payload.userName;
         socket.emit("loggedin", {
           id: action.payload._id,
-          username: action.payload.userName,
+          userName: action.payload.userName,
         });
       })
       .addCase(checkauth.rejected, (state, { payload }) => {

@@ -7,12 +7,12 @@ import {
 } from "../controllers/groupmessge.controller.js";
 const groupMessageRouter = express.Router();
 
-groupMessageRouter.post("/sendmessage/:gid/:sid", protectedRoute, sendMessage);
-groupMessageRouter.get("/getmessage/:gid", protectedRoute, getMessage);
 groupMessageRouter.get(
   "/fetchlatestgroupmessages/message",
   protectedRoute,
   fetchlatestgroupmessages
 );
+groupMessageRouter.get("/getmessage/:gid", protectedRoute, getMessage);
+groupMessageRouter.post("/sendmessage/:gid/:sid", protectedRoute, sendMessage);
 
 export default groupMessageRouter;

@@ -6,7 +6,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useDispatch } from "react-redux";
 import { setWhichIsClicked } from "../slices/userslice/UserSlice";
 
-const ChatHeader = ({ username, status, groupMembers }) => {
+const ChatHeader = ({ userName, status, groupMembers }) => {
   const dispatch = useDispatch();
 
   const handleClick = (which) => () => {
@@ -24,7 +24,7 @@ const ChatHeader = ({ username, status, groupMembers }) => {
       <Box display="flex" alignItems="center">
         <Avatar sx={{ width: 40, height: 40, backgroundColor: "red" }} />
         <Box className="ms-3 pt-1">
-          <Typography variant="body1">{username}</Typography>
+          <Typography variant="body1">{userName}</Typography>
           <Typography variant="body2" color="success.main">
             {status}
           </Typography>

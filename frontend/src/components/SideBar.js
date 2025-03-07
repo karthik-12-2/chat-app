@@ -1,4 +1,4 @@
-import { Box, Avatar, Divider } from "@mui/material";
+import { Box, Avatar, Divider, Badge, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import SideBarSkeleton from "./skeletons/SideBarSkeleton";
 import { useEffect, useState } from "react";
@@ -25,7 +25,9 @@ const SideBar = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [onlineUser, setOnlineUser] = useState(null);
   const [activeButton, setActiveButton] = useState("all");
+  const [totalusers, setTotalUsers] = useState(0);
 
+  console.log(onlineUser);
   useEffect(() => {
     if (group.id === "" && group.groupname === "" && !isLoggedin) {
       setActiveButton("all");
@@ -33,11 +35,11 @@ const SideBar = () => {
   }, [activeButton, group.groupname, group.id, isLoggedin]);
 
   useEffect(() => {
-    if (selectedUser?.id && selectedUser?.username) {
+    if (selectedUser?.id && selectedUser?.userName) {
       dispatch(
         setUserToChatId({
           id: selectedUser.id,
-          username: selectedUser.username,
+          userName: selectedUser.userName,
         })
       );
     }
@@ -63,12 +65,12 @@ const SideBar = () => {
 
   useEffect(() => {
     const handleLoggedOut = (user) => {
-      setOnlineUser((prev) => prev?.filter((online) => online.id !== user.id));
+      setOnlineUser((prev) => prev?.filter((online) => online.id === user.id));
     };
     socket.on("loggedoutuser", handleLoggedOut);
 
     return () => socket.off("loggedoutuser", handleLoggedOut);
-  }, [onlineUser]);
+  }, []);
 
   useEffect(() => {
     users.forEach((user) => {
@@ -91,14 +93,23 @@ const SideBar = () => {
     }
   }, [isLoggedin]);
 
+  useEffect(() => {
+    const handleTotalUsers = (totalOnlineUsers) => {
+      setTotalUsers(totalOnlineUsers);
+    };
+    socket.on("totalusers", handleTotalUsers);
+
+    return () => socket.off("totalusers", handleTotalUsers);
+  }, []);
+
   const handleClick = (what) => () => {
     setActiveButton(what);
-    dispatch(setUserToChatId({ id: "", username: "" }));
+    dispatch(setUserToChatId({ id: "", userName: "" }));
     dispatch(setGroup({ id: "", groupname: "" }));
     if (what !== "more") {
       dispatch(setWhichIsClicked(null));
     }
-  }
+  };
 
   return (
     isLoggedin && (
@@ -124,26 +135,29 @@ const SideBar = () => {
             <Box display="flex">
               <Avatar sx={{ width: 60, height: 60 }} />
               <Box sx={{ marginLeft: 2, lineHeight: 1.2 }}>
-                {(anotherUser?.id && anotherUser?.username) ||
+                {(anotherUser?.id && anotherUser?.userName) ||
                 (group?.id && group?.groupname) ? (
                   <>
-                    <p className="text-success d-sm-none d-lg-block">
-                      {anotherUser.username || (
-                        <>
-                          {group.groupname}
-                          <span className="text-dark ps-2">Group</span>
-                        </>
-                      )}
-                    </p>
-                    <p className="text-success d-sm-none d-lg-block">
-                      Available
+                    <Typography className="text-success d-sm-none d-lg-block">
+                      {onlineUser
+                        ?.slice(0, 3)
+                        .map((user) => user.userName)
+                        .join(", ")}
+                    </Typography>
+                    <p className="text-success d-sm-none d-lg-inline-block mt-1">
+                      {totalusers} users online
                     </p>
                   </>
                 ) : (
                   <>
-                    <p className="text-success d-sm-none d-lg-block">--</p>
-                    <p className="text-success d-sm-none d-lg-inline-block">
-                      No Available
+                    <Typography className="text-success d-sm-none d-lg-block">
+                      {onlineUser
+                        ?.slice(0, 3)
+                        .map((user) => user.userName)
+                        .join(", ")}
+                    </Typography>
+                    <p className="text-success d-sm-none d-lg-inline-block mt-1">
+                      {totalusers} users online
                     </p>
                   </>
                 )}
@@ -163,7 +177,7 @@ const SideBar = () => {
                 width: "auto",
                 backgroundColor: "whitesmoke",
                 display: "flex",
-                justifyContent: "space-between",
+                justifyContent: "space-around",
                 padding: "5px",
                 paddingInline: "5px",
                 borderRadius: "25px",
@@ -197,7 +211,8 @@ const SideBar = () => {
               >
                 All
               </button>
-              <button
+              {/* TODO : commentout if you want personals */}
+              {/* <button
                 style={{
                   height: "30px",
                   color: "blue",
@@ -220,7 +235,7 @@ const SideBar = () => {
                 onClick={handleClick("personals")}
               >
                 Personals
-              </button>
+              </button> */}
               <button
                 style={{
                   height: "30px",

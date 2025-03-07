@@ -44,7 +44,7 @@ const NavBar = () => {
     dispatch(logout());
     navigate("/login");
     socket.emit("loggedout", currentUser);
-    dispatch(setUserToChatId({ id: "", username: "" }));
+    dispatch(setUserToChatId({ id: "", userName: "" }));
     dispatch(setGroup({ id: "", groupname: "" }));
   };
 

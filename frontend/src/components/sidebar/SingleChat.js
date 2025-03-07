@@ -41,7 +41,7 @@ const SingleChat = ({
               onClick={() =>
                 setSelectedUser({
                   id: user._id,
-                  username: user.userName,
+                  userName: user.userName,
                 })
               }
               onContextMenu={(e) => handleContextMenu(e, user)}

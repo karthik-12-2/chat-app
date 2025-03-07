@@ -32,7 +32,7 @@ const UserProfile = () => {
             }}
           >
             <Avatar sx={{ width: "100px", height: "100px" }} />
-            <h4 className="mt-1">{anotherUser?.username}</h4>
+            <h4 className="mt-1">{anotherUser?.userName}</h4>
           </Box>
           <Divider sx={{ border: "1px solid black", marginBlock: "10px" }} />
           <Box>

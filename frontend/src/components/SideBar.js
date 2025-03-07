@@ -44,24 +44,30 @@ const SideBar = () => {
   }, [selectedUser, dispatch]);
 
   useEffect(() => {
-    socket.on("allusers", (users) => {
+    const handleAllUsers = (users) => {
       dispatch(setAllUsers(users));
-    });
+    };
+    socket.on("allusers", handleAllUsers);
+
+    return () => socket.off("allusers", handleAllUsers);
   }, [dispatch]);
 
   useEffect(() => {
-    socket.on("loggedinuser", (user) => {
+    const handleLoggedIn = (user) => {
       setOnlineUser(user);
-    });
+    };
+    socket.on("loggedinuser", handleLoggedIn);
+
+    return () => socket.off("loggedinuser", handleLoggedIn);
   }, []);
 
   useEffect(() => {
-    socket.on("loggedoutuser", (user) => {
-      const updatedOnlineusers = onlineUser?.filter(
-        (online) => online.id === user.id
-      );
-      setOnlineUser(updatedOnlineusers);
-    });
+    const handleLoggedOut = (user) => {
+      setOnlineUser((prev) => prev?.filter((online) => online.id !== user.id));
+    };
+    socket.on("loggedoutuser", handleLoggedOut);
+
+    return () => socket.off("loggedoutuser", handleLoggedOut);
   }, [onlineUser]);
 
   useEffect(() => {
@@ -75,10 +81,6 @@ const SideBar = () => {
     });
   }, [onlineUser, users, dispatch]);
 
-  // useEffect(() => {
-  //   dispatch(getLatestMessage(anotherUser?.id));
-  // }, [dispatch, anotherUser?.id]);
-
   useEffect(() => {
     dispatch(getLatestMessageEveryUser());
   }, [dispatch]);
@@ -89,7 +91,7 @@ const SideBar = () => {
     }
   }, [isLoggedin]);
 
-  function handleClick(what) {
+  const handleClick = (what) => () => {
     setActiveButton(what);
     dispatch(setUserToChatId({ id: "", username: "" }));
     dispatch(setGroup({ id: "", groupname: "" }));
@@ -191,7 +193,7 @@ const SideBar = () => {
                     e.currentTarget.style.backgroundColor = "";
                   }
                 }}
-                onClick={() => handleClick("all")}
+                onClick={handleClick("all")}
               >
                 All
               </button>
@@ -215,7 +217,7 @@ const SideBar = () => {
                     e.currentTarget.style.backgroundColor = "";
                   }
                 }}
-                onClick={() => handleClick("personals")}
+                onClick={handleClick("personals")}
               >
                 Personals
               </button>
@@ -239,7 +241,7 @@ const SideBar = () => {
                     e.currentTarget.style.backgroundColor = "";
                   }
                 }}
-                onClick={() => handleClick("group")}
+                onClick={handleClick("group")}
               >
                 Group
               </button>
@@ -255,7 +257,7 @@ const SideBar = () => {
                   latestMessages={latestMessages}
                 />
               )}
-              {activeButton === "personal" && <PersonalChat />}
+              {activeButton === "personals" && <PersonalChat />}
               {activeButton === "group" && <GroupChat />}
             </div>
           </>

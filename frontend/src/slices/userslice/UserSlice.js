@@ -173,7 +173,6 @@ export const userSlice = createSlice({
       })
       .addCase(getAllUsers.fulfilled, (state, action) => {
         state.loading = false;
-        // state.users = action.payload;
         socket.emit("allusers", action.payload);
       })
       .addCase(getAllUsers.rejected, (state) => {

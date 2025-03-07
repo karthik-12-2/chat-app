@@ -23,12 +23,10 @@ const ChatContainer = () => {
     (state) => state.user
   );
   const { group, groups, groupMessage } = useSelector((state) => state.group);
-  const [selectedGroup, setSelectedGroup] = useState(null);
   const [groupMembers, setGroupMembers] = useState([]);
 
   useEffect(() => {
     const sg = groups.find((g) => g._id === group.id);
-    setSelectedGroup(sg);
     setGroupMembers(sg?.groupMembers);
   }, [groups, group.id]);
 

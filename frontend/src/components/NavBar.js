@@ -8,7 +8,6 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
 import WebStoriesIcon from "@mui/icons-material/WebStories";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
 import FilterTiltShiftIcon from "@mui/icons-material/FilterTiltShift";
@@ -91,7 +90,7 @@ const NavBar = () => {
                 padding: "0",
                 paddingBottom: i === arr.length - 1 ? "0" : "10px",
               }}
-              key={icon.name}
+              key={i}
             >
               <ListItemButton
                 sx={{ paddingBottom: "15px", borderRadius: "100%" }}

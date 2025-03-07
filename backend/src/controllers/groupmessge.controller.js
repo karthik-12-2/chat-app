@@ -25,7 +25,7 @@ export const sendMessage = async (req, res) => {
       await newMessage.save();
     }
 
-    io.emit("newgroupmessage", newMessage);
+    io.emit("newgroupmessage", newMessage);   
   } catch (error) {
     console.log("error from sendMessage group controller", error);
     return res.status(500).json("Interanl Server Error");

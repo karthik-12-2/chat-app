@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../lib/axios";
 import toast from "react-hot-toast";
+import { socket } from "../../lib/socket";
 
 // create group
 export const createGroup = createAsyncThunk(
@@ -115,14 +116,18 @@ export const groupSlice = createSlice({
     setOpen: (state, { payload }) => {
       state.opengroup = payload;
     },
+    setAllGroups: (state, {payload}) => {
+      state.groups.push(payload)
+    }
   },
   extraReducers: (builder) => {
     builder
       .addCase(createGroup.pending, () => {
         toast.loading("Creating group...");
       })
-      .addCase(createGroup.fulfilled, (state) => {
+      .addCase(createGroup.fulfilled, (state, {payload}) => {
         state.opengroup = false;
+        socket.emit('allgroups', payload)
         toast.dismiss();
         toast.success("New group created Successfully");
       })
@@ -171,6 +176,6 @@ export const groupSlice = createSlice({
   },
 });
 
-export const { setGroup, setOpen } = groupSlice.actions;
+export const { setGroup, setOpen, setAllGroups } = groupSlice.actions;
 
 export default groupSlice.reducer;

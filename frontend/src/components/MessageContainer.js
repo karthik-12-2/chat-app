@@ -6,7 +6,6 @@ import CheckDays from "./CheckDays";
 const MessageContainer = ({ messages, whoSends }) => {
   const messasgeEndRef = useRef(null);
   const { currentUser } = useSelector((state) => state.user);
-  console.log(whoSends);
 
   useEffect(() => {
     if (messages.length && messasgeEndRef.current) {

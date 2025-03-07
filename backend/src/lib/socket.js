@@ -16,12 +16,12 @@ io.on("connection", (socket) => {
   console.log("connected");
 
   socket.on("loggedin", (user) => {
-      if(user) {
-            const userExists = onlineUsers.some(online => online.id === user.id)
-            if(!userExists){
-                  onlineUsers.push(user);
-            }
+    if (user) {
+      const userExists = onlineUsers.some((online) => online.id === user.id);
+      if (!userExists) {
+        onlineUsers.push(user);
       }
+    }
     io.emit("loggedinuser", onlineUsers);
   });
 
@@ -40,9 +40,13 @@ io.on("connection", (socket) => {
 
   io.emit("totalusers", onlineUsers.length);
 
-  socket.on('allusers', (users) => {
-      io.emit('allusers', users)
-  })
+  socket.on("allusers", (users) => {
+    io.emit("allusers", users);
+  });
+
+  socket.on("allgroups", (groups) => {
+    io.emit("allgroups", groups);
+  });
 });
 
 export { app, server, io };

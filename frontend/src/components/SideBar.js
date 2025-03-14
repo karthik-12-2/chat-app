@@ -1,4 +1,4 @@
-import { Box, Avatar, Divider, Badge, Typography } from "@mui/material";
+import { Box, Avatar, Divider, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import SideBarSkeleton from "./skeletons/SideBarSkeleton";
 import { useEffect, useState } from "react";
@@ -241,7 +241,7 @@ const SideBar = () => {
                   height: "30px",
                   color: "blue",
                   borderRadius: "15px",
-                  backgroundColor:
+                  backgroundColor: 
                     activeButton === "group" ? "lightgreen" : "whitesmoke",
                   width: "20%",
                   paddingTop: "2px",

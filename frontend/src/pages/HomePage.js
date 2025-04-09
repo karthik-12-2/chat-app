@@ -28,10 +28,10 @@ const HomePage = () => {
     isLoggedin && (
       <>
         <div
-          className={`mt-1 me-1 col-md-7 ${
-            whichIsClicked || opengroup ? "col-lg-5" : "col-lg-8"
-          } col-sm-9 ms-0 rounded-4 p-0 position-relative`}
-          style={{ minHeight: "98vh" }}
+          className={`mt-0 me-0 ${
+            whichIsClicked || opengroup ? "col-lg-8" : "col-lg-12"
+          } col-12 ms-0 rounded-4 p-0 position-relative`}
+          style={{ height: "98vh" }}
         >
           <ChatContainer />
         </div>

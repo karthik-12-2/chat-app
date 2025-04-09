@@ -112,20 +112,18 @@ const SideBar = () => {
   };
 
   return (
-    isLoggedin && (
+     (
       <Box
         sx={{
-          maxWidth: { md: "25%", sm: "10%" },
           backgroundColor: "rgba(245, 245, 245, 0.50)",
           borderRadius: "12px",
           color: "red",
-          marginTop: 0.5,
+          marginTop: 0,
           marginBottom: 0,
-          paddingX: { sm: 0.5, md: 3 },
+          paddingX: { sm: 1, md: 2 },
           paddingY: 3,
-          marginRight: { sm: 1, md: 1 },
-          marginLeft: { sm: 1, md: 0 },
           position: "relative",
+          height: "100%",
         }}
       >
         {loading ? (
@@ -243,7 +241,7 @@ const SideBar = () => {
                   borderRadius: "15px",
                   backgroundColor: 
                     activeButton === "group" ? "lightgreen" : "whitesmoke",
-                  width: "20%",
+                  width: "25%",
                   paddingTop: "2px",
                   paddingLeft: "6px",
                   border: "none",

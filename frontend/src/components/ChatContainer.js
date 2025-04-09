@@ -76,7 +76,7 @@ const ChatContainer = () => {
   const userStatus = status.find((s) => s.userId === anotherUser?.id);
   return (
     <Box
-      className={`col-12 ms-2 rounded-4 p-0 position-relative`}
+      className={`col-12 rounded-4 p-0 position-relative`}
       style={{
         height: "100%",
         backgroundImage:

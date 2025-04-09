@@ -53,8 +53,8 @@ const GroupChat = () => {
       </div>
       <div
         id="groups"
-        className="mt-4 overflow-y-scroll pe-2"
-        style={{ height: "60vh" }}
+        className="mt-3 overflow-y-scroll "
+        style={{ height: "56vh" }}
       >
         {groups?.map((group, i) => {
           const lastMessage = latestMessage.find(

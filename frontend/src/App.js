@@ -12,20 +12,32 @@ import { useSelector } from "react-redux";
 import { Box } from "@mui/material";
 
 function App() {
-  const {isLoggedin} = useSelector((state) => state.user)
+  const { isLoggedin } = useSelector((state) => state.user);
   return (
-    <Box className={`row m-0 p-1`} >
-      <NavBar />
-      {isLoggedin && <SideBar/>}
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/*" element={<ErrorPage/>}/>
-      </Routes>
+      <Box className={`row m-0 p-1 bg-black `}>
+        {/* Nabar */}
+        <Box className={`col-2 col-sm-1 p-0 pe-1 `}>
+          <NavBar />
+        </Box>
 
-      <Toaster />
-    </Box>
+        {isLoggedin && (
+          <Box className="col-2 col-md-4 col-lg-3 p-0">
+            <SideBar />
+          </Box>
+        )}
+
+        {/* Main Content */}
+        <Box className={`col-7 col-xs-8 ps-1 p-0`}>
+        <Routes>
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/*" element={<ErrorPage />} />
+        </Routes>
+        </Box>
+
+        <Toaster />
+      </Box>
   );
 }
 

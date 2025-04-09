@@ -19,11 +19,10 @@ const SingleChat = ({
     <div
       style={{
         width: "100%",
-        position: "absolute",
         marginTop: "10px",
-        height: "70vh",
+        height: "68vh",
       }}
-      className="overflow-y-scroll pe-1"
+      className="overflow-y-scroll"
     >
       {users.length > 0 &&
         users.map((user) => {

@@ -50,8 +50,8 @@ const NavBar = () => {
 
   return isLoggedin ? (
     <nav
-      className=" mt-1  mb-0  ps-md-0 pe-lg-0 pe-md-2 me-3 ms-3"
-      style={{ width: "4%" }}
+      className=" mt-0"
+      style={{ height: "98vh" }}
     >
       <List
         sx={{
@@ -61,7 +61,7 @@ const NavBar = () => {
           height: "100%",
           backgroundColor: "rgba(245,245,245, 0.50)",
           borderRadius: "12px",
-          padding: { sm: "2" },
+          padding: { sm: "1" },
         }}
       >
         <ListItem>

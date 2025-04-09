@@ -29,15 +29,15 @@ const HomePage = () => {
       <>
         <div
           className={`mt-0 me-0 ${
-            whichIsClicked || opengroup ? "col-lg-8" : "col-lg-12"
-          } col-12 ms-0 rounded-4 p-0 position-relative`}
+            whichIsClicked || opengroup ? "col-7" : "col-12"
+          } ms-0 rounded-4 p-0 position-relative`}
           style={{ height: "98vh" }}
         >
           <ChatContainer />
         </div>
         {opengroup && (
           <div
-            className="mt-1 me-1 col-lg-3 col-sm-9 ms-3 rounded-4 p-0 position-relative"
+            className="col-lg-3 col-12 rounded-4 p-0 position-absolute top-0 end-0 me-1 mt-1"
             style={{ minHeight: "98vh" }}
           >
             <MembersAddinGroup />
@@ -45,7 +45,7 @@ const HomePage = () => {
         )}
         {whichIsClicked === "more" && (
           <div
-            className="mt-1 me-1 col-lg-3 col-sm-9 ms-3 rounded-4 p-0 position-relative"
+            className="col-lg-3 col-12 rounded-4 p-0 position-absolute top-0 end-0 me-1 mt-1"
             style={{ minHeight: "98vh" }}
           >
             <UserProfile />

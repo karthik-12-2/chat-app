@@ -17,8 +17,8 @@ const UserProfile = () => {
 
   return (
     <div
-      className="col-12 position-absolute rounded-4 bg-light p-3"
-      style={{ height: "100%" }}
+      className="col-12 rounded-4 bg-light p-3"
+      style={{ height: "98vh" }}
     >
       <ClearIcon onClick={handleCancel} sx={{ cursor: "pointer" }} />
       {!group ? (

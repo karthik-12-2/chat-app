@@ -16,18 +16,18 @@ function App() {
   return (
       <Box className={`row m-0 p-1 bg-black `}>
         {/* Nabar */}
-        <Box className={`col-2 col-sm-1 p-0 pe-1 `}>
+        <Box className={` col-sm-2 col-lg-1 col-md-1 p-0 pe-1 me-lg-2 ms-lg-4 ms-sm-0`} sx={{width:{lg: '5%'}}}>
           <NavBar />
         </Box>
 
         {isLoggedin && (
-          <Box className="col-2 col-md-4 col-lg-3 p-0">
+          <Box className="col-2 col-md-4 col-lg-3 col-md-2 p-0 me-md-2">
             <SideBar />
           </Box>
         )}
 
         {/* Main Content */}
-        <Box className={`col-7 col-xs-8 ps-1 p-0`}>
+        <Box className={`col-6 col-lg-8 col-xs-8 ps-1 p-0`}>
         <Routes>
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/login" element={<LoginPage />} />

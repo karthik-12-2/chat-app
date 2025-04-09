@@ -54,7 +54,7 @@ const MembersAddinGroup = () => {
 
   return (
     <div
-      className={`me-1 col-lg-12 col-sm-9  ms-1 rounded-4 p-3  position-relative h-100 bg-white`}
+      className={`me-1 col-12 rounded-4 p-3 bg-white`} style={{height: '98vh'}}
     >
       <div className="px-4 d-flex justify-content-between">
         <h5 className="text-center">Create a new Group</h5>
